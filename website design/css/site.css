@@ -1,0 +1,535 @@
+/* ============================================================
+   OPS DETOX™ — working site
+   Design system carried over from high-fidelity-design/,
+   expanded for multi-page use and real interaction.
+
+   1.  Fonts
+   2.  Tokens
+   3.  Base
+   4.  Layout helpers
+   5.  Header + mobile nav
+   6.  Buttons + links
+   7.  Hero
+   8.  Ticker
+   9.  Trust row
+   10. Editorial grid sections
+   11. Process / steps
+   12. Outcomes (dark panel)
+   13. Seven modules + modal
+   14. Testimonials
+   15. About
+   16. Lists (for / not for / feels like)
+   17. Reason cards
+   18. Forms
+   19. Diagnostic
+   20. Choice block
+   21. Footer
+   22. Reveal motion
+   23. Responsive
+   ============================================================ */
+
+/* ---------- 1. Fonts ---------- */
+@font-face{
+  font-family:Formula;
+  src:url('../assets/fonts/FormulaCondensed-Bold.otf') format('opentype');
+  font-weight:700;
+  font-display:swap;
+}
+@font-face{
+  font-family:Inter;
+  src:url('../assets/fonts/Inter-Variable.ttf') format('truetype');
+  font-weight:100 900;
+  font-display:swap;
+}
+
+/* ---------- 2. Tokens ---------- */
+:root{
+  --ink:#143318;
+  --lime:#ccfe06;
+  --paper:#fbfbf9;
+  --panel:#f1f1ed;
+  --rule:#d8d9d4;
+  --muted:#5d665d;
+  --sans:Inter,Arial,sans-serif;
+  --display:Formula,Impact,sans-serif;
+  --header-h:78px;
+  --ticker-h:46px;
+  --section-y:120px;
+}
+
+/* ---------- 3. Base ---------- */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:var(--header-h)}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font:16px/1.6 var(--sans);
+  -webkit-font-smoothing:antialiased;
+}
+body.is-locked{overflow:hidden}
+a{color:inherit}
+img{display:block;max-width:100%}
+h1,h2,h3,p{margin:0}
+h1,h2,h3{line-height:.95;text-transform:uppercase}
+h1,h2{font-family:var(--display);letter-spacing:.005em}
+/* Headings are sized to land in 3 lines or fewer. The measure (ch) is the
+   lever: a tight max-width on display type turns a sentence into a word
+   ladder, so keep these generous and let the type scale down instead. */
+h1{font-size:clamp(44px,5vw,88px);max-width:19ch}
+h2{font-size:clamp(34px,3.6vw,58px);max-width:21ch}
+/* Headings that get the full container width can stay at display scale. */
+.section-heading h2,.system-intro h2,.outcomes h2{font-size:clamp(40px,4.7vw,74px);max-width:16ch}
+h3{font:700 18px/1.2 var(--sans);letter-spacing:-.03em;text-transform:none}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.outcomes :focus-visible,footer :focus-visible{outline-color:var(--lime)}
+.skip-link{
+  position:absolute;left:-9999px;top:0;z-index:50;
+  background:var(--ink);color:#fff;padding:12px 16px;font-size:12px;
+}
+.skip-link:focus{left:12px;top:12px}
+
+.eyebrow{
+  display:block;color:var(--muted);font-size:10px;font-weight:750;
+  letter-spacing:.15em;text-transform:uppercase;
+}
+
+/* ---------- 4. Layout helpers ---------- */
+.container{width:min(1180px,calc(100% - 64px));margin:auto}
+.section-rule{border-bottom:1px solid var(--rule)}
+.section-grid{
+  padding:var(--section-y) 0;
+  display:grid;grid-template-columns:1fr 1.1fr .8fr;gap:55px;
+}
+.section-grid--halves{grid-template-columns:1fr 1fr;gap:60px}
+.section-grid>div:first-child h2,.split-lists h2{font-size:clamp(32px,2.9vw,44px);max-width:none}
+.section-grid--halves h2{font-size:clamp(34px,3.4vw,52px)}
+.section-heading{display:flex;justify-content:space-between;align-items:end;gap:48px;margin-bottom:56px}
+.section-subhead{margin:16px 0 30px;font-size:clamp(36px,4vw,54px)}
+.section-heading p{max-width:44ch;color:var(--muted);font-size:15px}
+.section-pad{padding:var(--section-y) 0}
+.panel{background:var(--panel)}
+.body-copy{color:var(--muted);font-size:15px}
+.body-copy p+p{margin-top:20px}
+
+/* ---------- 5. Header + mobile nav ---------- */
+.site-header{
+  height:var(--header-h);display:flex;align-items:center;
+  border-bottom:1px solid var(--rule);
+  background:rgba(251,251,249,.94);backdrop-filter:blur(12px);
+  position:sticky;top:0;z-index:20;
+}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:32px}
+.brand{width:134px;flex:none}
+.site-nav{display:flex;gap:28px}
+.site-nav a[aria-current="page"]{text-decoration:underline;text-underline-offset:5px}
+.nav-toggle{
+  display:none;border:1px solid var(--ink);background:transparent;
+  width:42px;height:38px;padding:0;place-items:center;cursor:pointer;
+}
+.nav-toggle i{display:block;width:18px;height:1.5px;background:var(--ink);position:relative}
+.nav-toggle i::before,.nav-toggle i::after{
+  content:'';position:absolute;left:0;width:18px;height:1.5px;background:var(--ink);transition:.2s ease;
+}
+.nav-toggle i::before{top:-5px}
+.nav-toggle i::after{top:5px}
+.nav-toggle[aria-expanded="true"] i{background:transparent}
+.nav-toggle[aria-expanded="true"] i::before{top:0;transform:rotate(45deg)}
+.nav-toggle[aria-expanded="true"] i::after{top:0;transform:rotate(-45deg)}
+
+/* ---------- 6. Buttons + links ---------- */
+.site-nav a,.button,.text-link{
+  font-size:11px;font-weight:750;text-transform:uppercase;
+  letter-spacing:.12em;text-decoration:none;
+}
+.site-nav a:hover,.text-link:hover{text-decoration:underline}
+.button{
+  display:inline-flex;align-items:center;gap:24px;cursor:pointer;
+  border:1px solid var(--ink);padding:13px 18px;
+  background:var(--ink);color:#fff;transition:.2s ease;
+  font-family:var(--sans);
+}
+.button:hover{background:var(--lime);color:var(--ink);border-color:var(--ink);transform:translateY(-2px)}
+.button--line{background:transparent;color:var(--ink)}
+.button--small{padding:10px 14px}
+.button--light{border-color:var(--lime);background:var(--lime);color:var(--ink)}
+.button--light:hover{background:transparent;color:var(--lime)}
+.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:36px}
+.text-link{display:inline-block;margin-top:28px}
+
+/* ---------- 7. Hero ---------- */
+/* The first screen holds the hero and the ticker, nothing else: the hero
+   takes whatever height is left once the header and the strip are removed.
+   svh keeps it honest on mobile browsers with collapsing toolbars. */
+.hero{
+  min-height:calc(100vh - var(--header-h) - var(--ticker-h));
+  min-height:calc(100svh - var(--header-h) - var(--ticker-h));
+  display:grid;
+  grid-template-columns:1.16fr .84fr;align-items:stretch;
+}
+.hero-copy{padding:64px 36px 64px 0;display:flex;flex-direction:column;justify-content:center}
+.hero-copy h1{margin:18px 0 28px}
+.hero-copy p{max-width:51ch;color:var(--muted)}
+.hero-image{margin:0;background:var(--panel);overflow:hidden;position:relative}
+.hero-image img{width:100%;height:100%;object-fit:cover;object-position:58% center;transform:scale(1.14)}
+.hero-image figcaption{
+  position:absolute;bottom:20px;left:20px;background:var(--paper);
+  padding:7px 10px;font-size:9px;text-transform:uppercase;font-weight:700;letter-spacing:.13em;
+}
+
+/* Compact hero for interior pages */
+.hero--page{min-height:0;grid-template-columns:1.1fr .9fr;align-items:center;gap:55px}
+.hero--page .hero-copy{padding:88px 0 88px}
+.hero--page .hero-image{height:420px;border-radius:3px}
+.hero--narrow{display:block;max-width:none}
+.hero--narrow .hero-copy{padding:96px 0 72px;max-width:20ch}
+.hero--narrow h1{max-width:none}
+.hero--narrow p{max-width:60ch}
+
+/* ---------- 8. Ticker ---------- */
+.ticker{
+  background:var(--ink);color:var(--lime);
+  font:22px/1 var(--display);text-transform:uppercase;
+  white-space:nowrap;overflow:hidden;padding:12px 0;
+}
+.ticker div{display:inline-block;animation:move 35s linear infinite}
+.ticker span{padding:0 21px}
+@keyframes move{to{transform:translateX(-50%)}}
+
+/* ---------- 9. Trust row ---------- */
+.trust{padding:75px 0;text-align:center}
+.trust p{font-size:13px;font-weight:700}
+.trust-logos{display:grid;grid-template-columns:repeat(4,1fr);margin-top:28px}
+.trust-logos span{font:40px var(--display);color:#aab2aa}
+
+/* ---------- 10. Editorial grid sections ---------- */
+.problem h2{margin-top:18px}
+.problem .body-copy{padding-top:56px}
+.artwork{align-self:center;margin:0}
+.artwork img{border-radius:3px}
+
+/* ---------- 11. Process / steps ---------- */
+.process-grid{border-top:1px solid var(--ink);display:grid;grid-template-columns:repeat(3,1fr)}
+.process-grid article{
+  min-height:330px;padding:24px 30px 20px 0;margin-right:30px;
+  border-right:1px solid var(--rule);display:flex;flex-direction:column;
+}
+.process-grid article:last-child{margin-right:0;border-right:0}
+.process-grid article>span{
+  font-size:10px;font-weight:700;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--muted);
+}
+.process-grid h3{margin:48px 0 14px}
+.process-grid p{font-size:13px;color:var(--muted)}
+.process-grid a{
+  margin-top:auto;padding-top:25px;font-size:10px;font-weight:750;
+  letter-spacing:.1em;text-transform:uppercase;text-decoration:none;
+}
+.process-grid a:hover{text-decoration:underline}
+
+/* ---------- 12. Outcomes (dark panel) ---------- */
+.outcomes{background:var(--ink);color:var(--paper);padding:105px 0}
+.outcomes .eyebrow{color:var(--lime)}
+.outcomes h2{color:var(--lime);margin:12px 0 20px}
+.outcome-intro{font-size:17px}
+.stat-grid{
+  margin-top:54px;border-top:1px solid rgba(255,255,255,.28);padding-top:29px;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:24px;
+}
+.stat-grid strong{font:clamp(48px,4.5vw,66px)/1 var(--display);color:var(--lime)}
+.stat-grid p{font-size:12px;line-height:1.45;max-width:20ch;margin-top:10px}
+
+/* ---------- 13. Seven modules + modal ---------- */
+.system{padding:115px 0;background:var(--panel)}
+.system-intro{display:flex;justify-content:space-between;align-items:end;gap:60px;margin-bottom:48px}
+.system-intro p{max-width:42ch;color:var(--muted);font-size:15px}
+.module-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border-top:1px solid var(--ink);border-left:1px solid var(--ink);
+}
+.module{
+  background:var(--paper);border:0;cursor:pointer;
+  border-right:1px solid var(--ink);border-bottom:1px solid var(--ink);
+  padding:22px;min-height:190px;text-align:left;color:var(--ink);
+  display:flex;flex-direction:column;transition:.2s ease;font-family:var(--sans);
+}
+.module:first-child{grid-column:span 2}
+.module:hover{background:var(--lime);transform:translateY(-3px)}
+.module img{width:27px;height:27px;margin-bottom:auto}
+.module h3{font-size:17px}
+.module p{margin-top:7px;font-size:12px;color:var(--muted)}
+.system-cta{text-align:center;margin-top:38px}
+
+.modal{
+  position:fixed;inset:0;z-index:40;display:none;
+  place-items:center;padding:24px;
+  background:rgba(20,51,24,.55);backdrop-filter:blur(3px);
+}
+.modal.is-open{display:grid}
+.modal-card{
+  background:var(--paper);width:min(560px,100%);max-height:86vh;overflow:auto;
+  padding:36px 34px 32px;position:relative;
+  animation:pop .26s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes pop{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.modal-card img{width:34px;height:34px;margin-bottom:22px}
+.modal-card h2{font-size:38px;max-width:none}
+.modal-card .modal-sub{margin-top:12px;font-size:15px;color:var(--muted)}
+.modal-note{
+  margin-top:26px;padding-top:18px;border-top:1px solid var(--rule);
+  font-size:12px;color:var(--muted);
+}
+.modal-close{
+  position:absolute;top:14px;right:14px;width:34px;height:34px;cursor:pointer;
+  border:1px solid var(--rule);background:transparent;color:var(--ink);font-size:16px;line-height:1;
+}
+.modal-close:hover{background:var(--lime);border-color:var(--ink)}
+
+/* ---------- 14. Testimonials ---------- */
+.testimonials{padding:95px 0}
+.testimonial-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:20px}
+.testimonial-grid article{
+  min-height:144px;border:1px solid var(--rule);display:grid;place-items:center;
+  padding:20px;text-align:center;
+  font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);
+}
+
+/* ---------- 15. About ---------- */
+.about{grid-template-columns:1fr 1fr;align-items:center;gap:85px}
+.about figure{margin:0;background:var(--panel);overflow:hidden;border-radius:3px}
+.about figure img{width:100%;height:530px;object-fit:cover;object-position:77% center}
+.about h2{margin:16px 0 30px}
+.about-copy>p{font-size:14px;color:var(--muted)}
+.about-copy>p+p{margin-top:16px}
+.values{margin-top:52px;padding-top:18px;border-top:1px solid var(--rule);font-size:14px;color:var(--muted)}
+.values strong{color:var(--ink)}
+.signature{margin-top:24px;font-size:13px;font-weight:700}
+
+/* ---------- 16. Lists ---------- */
+.split-lists{display:grid;grid-template-columns:1fr 1fr;gap:60px;padding:var(--section-y) 0}
+.marked-list{margin:24px 0 0;padding:0;list-style:none}
+.marked-list li{
+  position:relative;padding:16px 0 16px 28px;
+  border-bottom:1px solid var(--rule);font-size:14px;color:var(--muted);
+}
+.marked-list li::before{
+  content:'';position:absolute;left:0;top:23px;
+  width:9px;height:9px;background:var(--lime);border:1px solid var(--ink);
+}
+.marked-list--plain li::before{background:transparent}
+.marked-list p{margin-top:24px;font-size:14px;color:var(--muted)}
+
+/* ---------- 17. Reason cards ---------- */
+.reason-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.reason-grid article{background:var(--paper);padding:30px 26px;min-height:200px;transition:.2s ease}
+.reason-grid article:hover{background:var(--panel)}
+.reason-grid span{
+  display:block;font:32px var(--display);color:var(--lime);
+  -webkit-text-stroke:.6px var(--ink);margin-bottom:22px;
+}
+.reason-grid h3{margin-bottom:10px}
+.reason-grid p{font-size:13px;color:var(--muted)}
+
+/* ---------- 18. Forms ---------- */
+.form-card{background:var(--panel);padding:38px 34px;border-radius:3px}
+.field{margin-bottom:16px}
+.field label{
+  display:block;font-size:10px;font-weight:750;letter-spacing:.12em;
+  text-transform:uppercase;margin-bottom:7px;
+}
+.field input,.field textarea,.field select{
+  width:100%;padding:12px;background:var(--paper);
+  border:1px solid var(--rule);color:var(--ink);
+  font:14px var(--sans);border-radius:0;
+}
+.field textarea{min-height:120px;resize:vertical}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--ink);outline:none}
+.field input[aria-invalid="true"],.field textarea[aria-invalid="true"]{border-color:#b3261e}
+.field-error{display:block;margin-top:6px;font-size:11px;color:#b3261e;min-height:14px}
+.form-note{margin-top:16px;font-size:11px;color:var(--muted)}
+.form-status{
+  margin-top:18px;padding:14px 16px;background:var(--lime);
+  border:1px solid var(--ink);font-size:13px;font-weight:600;display:none;
+}
+.form-status.is-visible{display:block}
+
+/* ---------- 19. Diagnostic ---------- */
+.diag{padding:var(--section-y) 0;background:var(--panel)}
+.diag-shell{background:var(--paper);border:1px solid var(--rule);padding:40px 36px;max-width:760px;margin:auto}
+.diag-progress{height:4px;background:var(--rule);margin-bottom:28px}
+.diag-progress i{display:block;height:100%;width:0;background:var(--lime);border-right:1px solid var(--ink);transition:width .3s ease}
+.diag-step{font-size:10px;font-weight:750;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
+.diag-question{font:700 22px/1.25 var(--sans);margin:14px 0 26px;letter-spacing:-.02em}
+.diag-scale{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.diag-scale button{
+  border:1px solid var(--ink);background:transparent;cursor:pointer;
+  padding:18px 10px 14px;font-family:var(--sans);color:var(--ink);transition:.2s ease;
+}
+.diag-scale button:hover,.diag-scale button.is-selected{background:var(--lime);transform:translateY(-2px)}
+.diag-scale strong{display:block;font:26px var(--display)}
+.diag-scale small{display:block;margin-top:6px;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.diag-nav{display:flex;justify-content:space-between;align-items:center;margin-top:28px}
+.diag-back{
+  border:0;background:transparent;cursor:pointer;color:var(--muted);
+  font:750 10px var(--sans);letter-spacing:.12em;text-transform:uppercase;
+}
+.diag-back:hover{color:var(--ink);text-decoration:underline}
+.diag-result{display:none}
+.diag-result.is-visible{display:block}
+.diag-score{font:clamp(64px,8vw,104px)/1 var(--display);color:var(--ink)}
+.diag-bars{margin-top:32px;border-top:1px solid var(--rule)}
+.diag-bars div{display:grid;grid-template-columns:200px 1fr 42px;align-items:center;gap:16px;padding:12px 0;border-bottom:1px solid var(--rule)}
+.diag-bars span{font-size:12px;font-weight:600}
+.diag-bars i{display:block;height:10px;background:var(--lime);border:1px solid var(--ink);transition:width .5s ease}
+.diag-bars b{font:16px var(--display);text-align:right}
+
+/* ---------- 20. Choice block ---------- */
+.choice{padding:110px 0;background:var(--lime);text-align:center}
+.choice h2{margin:15px auto 24px;font-size:clamp(54px,7vw,102px);max-width:9ch}
+.switch-line{display:flex;align-items:center;justify-content:center;gap:12px;font-size:14px;font-weight:700}
+.switch-line span{opacity:.45;transition:.2s ease}
+.switch-line span.is-on{opacity:1}
+.switch{
+  border:0;background:var(--ink);width:54px;height:28px;border-radius:99px;
+  padding:4px;display:flex;cursor:pointer;justify-content:flex-start;transition:.2s ease;
+}
+.switch[aria-pressed="true"]{justify-content:flex-end}
+.switch i{width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s ease}
+.choice .actions{justify-content:center;margin-top:32px}
+
+/* ---------- 21. Footer ---------- */
+footer{background:var(--ink);color:var(--paper);padding:64px 0}
+.footer-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr .8fr;gap:48px}
+.footer-logo{width:150px}
+.footer-grid h2{font:26px var(--display);text-transform:uppercase;color:var(--lime);margin-bottom:16px;max-width:none}
+.footer-grid input{
+  display:block;width:100%;padding:10px;background:transparent;
+  border:1px solid rgba(255,255,255,.55);color:#fff;margin-bottom:8px;
+  font:10px var(--sans);letter-spacing:.12em;
+}
+.footer-grid input::placeholder{color:rgba(255,255,255,.6)}
+.footer-grid button[type="submit"]{
+  width:100%;border:0;background:var(--lime);color:var(--ink);padding:11px;cursor:pointer;
+  font:800 10px var(--sans);letter-spacing:.1em;text-transform:uppercase;
+}
+.footer-grid button[type="submit"]:hover{background:#fff}
+.footer-grid p{font-size:12px;margin-top:13px}
+.footer-grid b{display:block;color:var(--lime);font-size:9px;letter-spacing:.12em}
+.footer-grid a{display:block;color:inherit;text-decoration:none;font-size:12px;margin-bottom:8px}
+.footer-grid a:hover{text-decoration:underline}
+.footer-social{display:flex;gap:12px;margin-top:22px}
+.footer-social a{margin:0}
+.footer-social img{width:22px;height:22px}
+.footer-status{
+  margin-top:10px;font-size:11px;color:var(--lime);display:none;
+}
+.footer-status.is-visible{display:block}
+.footer-legal{
+  margin-top:48px;padding-top:20px;border-top:1px solid rgba(255,255,255,.2);
+  font-size:11px;color:rgba(255,255,255,.65);
+}
+
+/* ---------- 22. Reveal motion ---------- */
+@keyframes enter{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.hero-copy .eyebrow,.hero-copy h1,.hero-copy p,.hero-copy .actions,.hero-image{
+  animation:enter .7s cubic-bezier(.22,1,.36,1) both;
+}
+.hero-copy h1{animation-delay:.08s}
+.hero-copy p{animation-delay:.16s}
+.hero-copy .actions{animation-delay:.24s}
+.hero-image{animation-delay:.12s}
+
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s cubic-bezier(.22,1,.36,1)}
+.reveal.is-in{opacity:1;transform:none}
+
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .ticker div,.hero-copy .eyebrow,.hero-copy h1,.hero-copy p,
+  .hero-copy .actions,.hero-image,.modal-card{animation:none}
+  .reveal{opacity:1;transform:none;transition:none}
+  .button:hover,.module:hover,.diag-scale button:hover,.reason-grid article:hover{transform:none}
+}
+
+/* ---------- 23. Responsive ---------- */
+@media(max-width:1000px){
+  .reason-grid{grid-template-columns:1fr 1fr}
+  .stat-grid{grid-template-columns:1fr 1fr}
+  .testimonial-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:850px){
+  :root{--header-h:68px;--ticker-h:42px;--section-y:75px}
+  .container{width:min(100% - 40px,1180px)}
+
+  /* Mobile nav: panel drops under the sticky header */
+  .nav-toggle{display:grid}
+  .site-nav{
+    display:none;position:fixed;top:var(--header-h);left:0;right:0;
+    flex-direction:column;gap:0;
+    background:var(--paper);border-bottom:1px solid var(--rule);
+    padding:8px 20px 20px;z-index:19;
+  }
+  .site-nav.is-open{display:flex}
+  .site-nav a{padding:16px 0;border-bottom:1px solid var(--rule);font-size:13px}
+  .header-cta{display:none}
+
+  .hero,.hero--page{grid-template-columns:1fr;gap:0}
+  .hero--page{min-height:0}
+  /* Same rule as desktop: hero + ticker own the first screen. The image
+     takes whatever is left over, so the strip stays above the fold. */
+  .hero{grid-template-rows:auto 1fr}
+  .hero-copy,.hero--page .hero-copy,.hero--narrow .hero-copy{padding:36px 0 30px;max-width:none}
+  .hero-copy .actions{margin-top:26px}
+  .hero-image{height:auto;min-height:200px}
+  /* Let the grid row set the image height instead of the file's aspect ratio,
+     otherwise the picture overshoots and pushes the ticker past the fold. */
+  .hero-image img{position:absolute;inset:0;width:100%;height:100%}
+  .hero--page .hero-image{height:340px}
+  .hero h1,h1{font-size:clamp(38px,9.4vw,58px);max-width:none}
+  h2{font-size:clamp(32px,8vw,48px);max-width:none}
+  .section-grid>div:first-child h2,.split-lists h2,.section-grid--halves h2{font-size:clamp(30px,7.4vw,44px)}
+  .section-heading h2,.system-intro h2,.outcomes h2{font-size:clamp(32px,8.4vw,50px);max-width:none}
+  .hero-image img{transform:scale(1.08);object-position:62% center}
+
+  .section-grid,.section-grid--halves,.about,.split-lists{grid-template-columns:1fr;gap:35px}
+  .problem .body-copy{padding-top:0}
+  .section-heading,.system-intro{display:block}
+  .section-heading h2,.system-intro p{margin-top:16px}
+  .section-heading{margin-bottom:36px}
+
+  .process-grid,.stat-grid,.testimonial-grid,.reason-grid,.footer-grid{grid-template-columns:1fr}
+  .process-grid article{
+    min-height:0;margin:0;padding:24px 0;
+    border-right:0;border-bottom:1px solid var(--rule);
+  }
+  .process-grid h3{margin-top:25px}
+  .process-grid a{margin-top:20px}
+
+  .outcomes,.system,.testimonials,.trust{padding:var(--section-y) 0}
+  .module-grid{grid-template-columns:1fr 1fr}
+  .module:first-child{grid-column:span 1}
+  .about figure img{height:420px;object-position:76% center}
+  .reason-grid article{min-height:0}
+  .choice{padding:80px 0}
+  .ticker{font-size:18px}
+  .form-card,.diag-shell{padding:28px 22px}
+  .diag-scale{grid-template-columns:repeat(5,1fr);gap:5px}
+  .diag-scale button{padding:13px 4px 10px}
+  .diag-scale small{display:none}
+  .diag-question{font-size:19px}
+  .diag-bars div{grid-template-columns:1fr 46px;gap:8px}
+  .diag-bars i{display:none}
+}
+/* Short viewports (small phones, landscape): compress the hero rather than
+   push the ticker below the fold. */
+@media(max-width:850px) and (max-height:740px){
+  .hero-copy{padding:24px 0 22px}
+  .hero-copy h1{margin:12px 0 18px}
+  .hero-copy p{font-size:14px;line-height:1.5}
+  .hero-copy .actions{margin-top:18px;gap:8px}
+  .hero .button{padding:11px 14px;gap:16px}
+  .hero-image{min-height:130px}
+}
+@media(max-width:520px){
+  .module-grid{grid-template-columns:1fr}
+  .trust-logos{grid-template-columns:1fr 1fr;gap:20px}
+}
